@@ -44,8 +44,12 @@ model.features.requires_grad = False
 
 optimizer = optim.SGD([
                         # {'params': model.features.parameters(), 'lr': 0.1 * lr},
+                        {'params': model.proj0.parameters(), 'lr': lr},
+                        {'params': model.proj1.parameters(), 'lr': lr},
+                        {'params': model.proj2.parameters(), 'lr': lr},
+
                         {'params': model.fc_concat.parameters(), 'lr': lr},
-], lr=0.001, momentum=0.9, weight_decay=1e-5)
+], momentum=0.9, weight_decay=1e-5)
 
 def train(epoch):
     model.train()
