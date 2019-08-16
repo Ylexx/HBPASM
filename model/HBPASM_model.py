@@ -12,7 +12,7 @@ def mask_Generation(feature, alpha):
     avg = torch.sum(torch.sum(sum, dim=1), dim=1) / kernel ** 2
 
     mask = torch.where(sum > alpha * avg.view(batch_size, 1, 1), torch.ones(sum.size()).cuda(),
-                       (torch.zeros(sum.size())).cuda())
+                       (torch.zeros(sum.size()) + 0.1).cuda())
 
     mask = mask.unsqueeze(1)
     return mask
