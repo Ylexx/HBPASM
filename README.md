@@ -11,6 +11,9 @@
 Step 1. 
 - Download the resnet-34 pre-training parameters.
 [resnet34-parameters-download](https://pan.baidu.com/s/14KHkdAutkHLCdtsHu5VC7g)
+or 
+[resnet34-parameters-download](https://download.pytorch.org/models/resnet34-333f7ec4.pth)
+
 
 - Download the CUB-200-2011 dataset.
 [CUB-download](http://www.vision.caltech.edu/visipedia-data/CUB-200-2011/CUB_200_2011.tgz)
