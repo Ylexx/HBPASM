@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 from PIL import Image
 import model.HBPASM_model as HBPASM_model
 from utils.utils import progress_bar
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 trainset = data.MyDataset('./data/train_images_shuffle.txt', transform=transforms.Compose([
                                                 transforms.Resize((600, 600), Image.BILINEAR),
@@ -97,4 +97,4 @@ for epoch in range(1, 81):
     adjust_learning_rate(optimizer, epoch)
 
 
-torch.save(model.state_dict(), 'firststep.pth')
+torch.save(model.state_dict(), 'firststep_batch16.pth')

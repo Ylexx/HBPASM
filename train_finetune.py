@@ -41,13 +41,20 @@ model.cuda()
 
 pretrained = True
 if pretrained:
-    pre_dic = torch.load('firststep.pth')
+    pre_dic = torch.load('firststep_batch16.pth')
     model.load_state_dict(pre_dic)
 
 criterion = nn.NLLLoss()
-lr = 1e-2
+lr = 1e-1
 
-optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-5)
+optimizer = optim.SGD([
+                        {'params': model.features.parameters(), 'lr': 0.1*lr},
+                        {'params': model.proj0.parameters(), 'lr': lr},
+                        {'params': model.proj1.parameters(), 'lr': lr},
+                        {'params': model.proj2.parameters(), 'lr': lr},
+
+                        {'params': model.fc_concat.parameters(), 'lr': lr},
+], momentum=0.9, weight_decay=1e-5)
 
 def train(epoch):
     model.train()

@@ -28,13 +28,13 @@ class Net(nn.Module):
         # fc layer
         self.fc_concat = torch.nn.Linear(8192 * 3, 200)
 
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
-            elif isinstance(m, nn.Linear):
-                m.weight.data.normal_(0, 0.01)
-                m.bias.data.zero_()
+        # for m in self.modules():
+        #     if isinstance(m, nn.Conv2d):
+        #         n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+        #         m.weight.data.normal_(0, math.sqrt(2. / n))
+        #     elif isinstance(m, nn.Linear):
+        #         m.weight.data.normal_(0, 0.01)
+        #         m.bias.data.zero_()
 
         self.softmax = nn.LogSoftmax(dim=1)
         self.avgpool = nn.AvgPool2d(kernel_size=14)

@@ -121,7 +121,7 @@ class ResNet(nn.Module):
         fea3 = self.layer3(fea2)
         fea4_1 = self.layer4[0:1](fea3)
         fea4_2 = self.layer4[1:2](fea4_1)
-        fea4_3 = self.layer4[1:2](fea4_2)
+        fea4_3 = self.layer4[2:3](fea4_2)
 
         return fea4_1, fea4_2, fea4_3
 
