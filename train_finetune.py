@@ -9,7 +9,7 @@ import os
 import torch.backends.cudnn as cudnn
 from PIL import Image
 from utils.utils import progress_bar
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 trainset = data.MyDataset('./data/train_images_shuffle.txt', transform=transforms.Compose([
                                                 transforms.Resize((600, 600), Image.BILINEAR),
