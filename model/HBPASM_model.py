@@ -24,6 +24,9 @@ class Net(nn.Module):
         self.proj0 = nn.Conv2d(512, 8192, kernel_size=1, stride=1)
         self.proj1 = nn.Conv2d(512, 8192, kernel_size=1, stride=1)
         self.proj2 = nn.Conv2d(512, 8192, kernel_size=1, stride=1)
+        self.bn0 = nn.BatchNorm2d(512)
+        self.bn1 = nn.BatchNorm2d(512)
+        self.bn2 = nn.BatchNorm2d(512)
 
         # fc layer
         self.fc_concat = torch.nn.Linear(8192 * 3, 200)
@@ -53,9 +56,9 @@ class Net(nn.Module):
 
         Aggregated_mask = slack_mask1 * slack_mask2 * slack_mask3
 
-        feature4_0 = feature4_0 * Aggregated_mask
-        feature4_1 = feature4_1 * Aggregated_mask
-        feature4_2 = feature4_2 * Aggregated_mask
+        feature4_0 = self.bn0(feature4_0 * Aggregated_mask)
+        feature4_1 = self.bn1(feature4_1 * Aggregated_mask)
+        feature4_2 = self.bn2(feature4_2 * Aggregated_mask)
 
         feature4_0 = self.proj0(feature4_0)
         feature4_1 = self.proj1(feature4_1)

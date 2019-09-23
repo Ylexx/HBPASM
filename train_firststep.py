@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 from PIL import Image
 import model.HBPASM_model as HBPASM_model
 from utils.utils import progress_bar
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 trainset = data.MyDataset('./data/train_images_shuffle.txt', transform=transforms.Compose([
                                                 transforms.Resize((600, 600), Image.BILINEAR),
@@ -40,16 +40,13 @@ model.cuda()
 
 criterion = nn.NLLLoss()
 lr = 1.0
+
 model.features.requires_grad = False
 
-optimizer = optim.SGD([
-                        # {'params': model.features.parameters(), 'lr': 0.1 * lr},
-                        {'params': model.proj0.parameters(), 'lr': lr},
-                        {'params': model.proj1.parameters(), 'lr': lr},
-                        {'params': model.proj2.parameters(), 'lr': lr},
+base_params = list(map(id, model.features.parameters()))
+class_params = filter(lambda p: id(p) not in base_params, model.parameters())
+optimizer = optim.SGD([{'params': class_params, 'lr': lr}], momentum=0.9, weight_decay=1e-5)
 
-                        {'params': model.fc_concat.parameters(), 'lr': lr},
-], momentum=0.9, weight_decay=1e-5)
 
 def train(epoch):
     model.train()

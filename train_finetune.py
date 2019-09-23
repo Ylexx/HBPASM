@@ -9,7 +9,7 @@ import os
 import torch.backends.cudnn as cudnn
 from PIL import Image
 from utils.utils import progress_bar
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 trainset = data.MyDataset('./data/train_images_shuffle.txt', transform=transforms.Compose([
                                                 transforms.Resize((600, 600), Image.BILINEAR),
@@ -47,14 +47,10 @@ if pretrained:
 criterion = nn.NLLLoss()
 lr = 1e-1
 
-optimizer = optim.SGD([
-                        {'params': model.features.parameters(), 'lr': 0.1*lr},
-                        {'params': model.proj0.parameters(), 'lr': lr},
-                        {'params': model.proj1.parameters(), 'lr': lr},
-                        {'params': model.proj2.parameters(), 'lr': lr},
-
-                        {'params': model.fc_concat.parameters(), 'lr': lr},
-], momentum=0.9, weight_decay=1e-5)
+base_params = list(map(id, model.features.parameters()))
+class_params = filter(lambda p: id(p) not in base_params, model.parameters())
+optimizer = optim.SGD([{'params': model.features.parameters(), 'lr': 0.1*lr},
+                       {'params': class_params, 'lr': lr}], momentum=0.9, weight_decay=1e-5)
 
 def train(epoch):
     model.train()
@@ -88,6 +84,9 @@ def test():
         test_loss * 16., correct, len(testloader.dataset),
         100.0 * float(correct) / len(testloader.dataset)))
 
+    if (100.0 * float(correct) / len(testloader.dataset)) >= 87.5:
+        maxre = 100.0 * float(correct) / len(testloader.dataset)
+        torch.save(model.state_dict(), 'bestScore'+str(maxre) + '.pth')
 
 def adjust_learning_rate(optimizer, epoch):
     if epoch % 40 == 0:
