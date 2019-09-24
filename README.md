@@ -24,7 +24,7 @@ Step 2.
 Step 3. Train the fc_layer and proj-layer only.
 - python train_firststep.py
 
-Step 4. Fine-tune all layers. It gets an accuracy of around 86.8% on CUB-200-2011 when using resnet-34.
+Step 4. Fine-tune all layers. It gets an accuracy of around 87% on CUB-200-2011 when using resnet-34.
 - python train_finetune.py
 
 
